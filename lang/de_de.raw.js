@@ -1,8 +1,9 @@
 class T {
   constructor() {
-    this.page_title = "Mahlowat";
+    this.page_title = "Vote-O-Mat";
+    this.vote_o_mat_title = "Vote-O-Mat 2021";
     this.qa_modal_title = "Fragen &amp; Antworten";
-    this.qa_modal_body = '<h4>Wer steht hinter dem Mahlowat?</h4>\
+    this.qa_modal_body = '<h4>Wer steht hinter dem Vote-O-Mat?</h4>\
 					<p>Lorem Ipsum.</p>\
 \
 					<h4>Wer hat die Thesen erarbeitet?</h4>\
@@ -37,22 +38,22 @@ class T {
 					<h4>Ich habe einen inhaltlichen Fehler gefunden!</h4>\
 					<p>Gib uns gern Bescheid, wir sehen uns das an. Wer „wir“ sind, steht oben auf dieser Seite.</p>\
 \
-					<h4>Wer hat den Mahlowat programmiert?</h4>\
+					<h4>Wer hat den Vote-O-Mat programmiert?</h4>\
 					<p>Das steht\
-						<a href="https://github.com/hszemi/mahlowat">hier</a>. Der Mahlowat ist übrigens freie Software!</p>\
+						<a href="https://github.com/SilvanVerhoeven/vote-o-mat">hier</a>. Der Vote-O-Mat ist übrigens freie Software!</p>\
 \
 					<h4>Ich habe einen Programmierfehler gefunden!</h4>\
 					<p>Oh nein! Wenn du den Fehler\
-						<a href="https://github.com/hszemi/mahlowat">meldest</a>, wird er vielleicht behoben.</p>';
+						<a href="https://github.com/SilvanVerhoeven/vote-o-mat">meldest</a>, wird er vielleicht behoben.</p>';
     this.btn_qa_modal_close = "Schließen";
     this.swype_info_message_text = "Wische, um manuell zwischen Thesen zu wechseln";
     this.btn_swype_info_ok = "OK";
-    this.start_subtitle = "Der Mahlowat ist ein Wahlpositions&shy;vergleichswerkzeug.";
-    this.start_explanatory_text = "<p>Der Mahlowat ermöglicht es dir, deine Meinung zu ausgewählten Thesen mit denen der Gruppen zu vergleichen, die zur $WAHL\
+    this.start_subtitle = "Der Vote-O-Mat ist ein Wahlpositions&shy;vergleichswerkzeug.";
+    this.start_explanatory_text = "<p>Der Vote-O-Mat ermöglicht es dir, deine Meinung zu ausgewählten Thesen mit denen der Gruppen zu vergleichen, die zur $WAHL\
 						antreten.\
 					</p>\
 					<p>Für ihre Stellungnahmen zu den Thesen sind die Gruppen selbst verantwortlich.</p>";
-    this.btn_start = "Mahlowat starten!";
+    this.btn_start = "Vote-O-Mat starten!";
     this.btn_start_show_qa = "Fragen &amp; Antworten";
     this.btn_toggle_thesis_more_text = "Erläuterung";
     this.btn_important = "These doppelt gewichten";
@@ -60,17 +61,18 @@ class T {
     this.btn_neutral_text = "Neutral";
     this.btn_no_text = "Ablehnung";
     this.btn_skip_text = "Überspringen";
-    this.btn_mahlowat_show_start = "Zurück zur Startseite";
-    this.btn_mahlowat_show_qa = "Fragen &amp; Antworten";
-    this.btn_mahlowat_skip_remaining_theses = "Alle verbleibenden Thesen überspringen und aktuellen Stand auswerten";
-    this.title_results = "Ergebnis";
-    this.title_results_summary = "Zusammenfassung";
+    this.btn_vote_o_mat_show_start = "Zurück zur Startseite";
+    this.btn_vote_o_mat_show_qa = "Fragen &amp; Antworten";
+    this.btn_vote_o_mat_skip_remaining_theses = "Alle verbleibenden Thesen überspringen und aktuellen Stand auswerten";
+    this.results_title = "Ergebnis";
+    this.results_title_summary = "Zusammenfassung";
     this.text_result_below_summary = '<small>Nicht zufrieden mit dem Ergebnis?\
-				<button class="btn btn-sm btn-light" onclick="showMahlowatFirstThesis()">Ändere die Antworten oder die Gewichtung!</button>\
+				<button class="btn btn-sm btn-light" onclick="showVoteOMatFirstThesis()">Ändere die Antworten oder die Gewichtung!</button>\
 			</small>';
-    this.title_results_details = "";
+    this.results_title_details = "";
     this.btn_results_show_start = "Zurück zur Startseite";
     this.btn_results_show_qa = "Fragen &amp; Antworten";
+    this.no_log_data = "Der Vote-O-Mat wurde bisher nicht genutzt.";
   }
 
   thesis_number(number) {
@@ -98,8 +100,29 @@ class T {
   }
 
   get error_loading_config_file() {
-    return '<b>Fehler</b> Die Konfigurationsdatei <a href="config/data.json"><tt>config/data.json</tt></a> konnte nicht geladen\
+    return '<b>Fehler:</b> Die Konfigurationsdatei <a href="config/data.json"><tt>config/data.json</tt></a> konnte nicht geladen\
 		werden. Existiert sie und enthält keine Syntaxfehler?';
+  }
+
+  get error_loading_setup_file() {
+    return '<b>Fehler:</b> Die Konfigurationsdatei <a href="../config/setup.json"><tt>../config/setup.json</tt></a> konnte nicht geladen\
+		werden. Existiert sie und enthält keine Syntaxfehler?';
+  }
+
+  get error_statistics_module_not_found() {
+    return '<b>Fehler:</b> Das Statistik-Modul konnte nicht erreicht werden. Wurde die URL zum Statistik-Modul in <a href="../config/setup.json"><tt>../config/setup.json</tt></a> richtig konfiguriert?';
+  }
+
+  get error_statistics_general() {
+    return '<b>Fehler:</b> Das Statistik-Modul arbeitet nicht korrekt. Prüfe die Browser-Konsole für weitere Fehlerinformationen.';
+  }
+
+  get warning_unknown_checkpoint_prefix() {
+    return '<b>Warnung:</b> Die Log-Datei enthält Checkpoint Präfixe, die keiner Sprache zugeordnet werden können. Grund hierfür könnte eine falsche Sprach-Konfiguration oder veraltete Log-Datei sein.<br><b>Behebung:</b> Prüfe mit <a href="../setup.html"><tt>../setup.html</tt></a>, ob die Sprach-Konfiguration im Abschnitt Statistiken korrekt ist. Führe anschließend die Konfiguration aller Vote-O-Mat-Instanzen erneut durch (sollte schnell gehen, die Werte werden vorausgefüllt). Wenn die Sprach-Konfiguration erst kürzlich geändert wurde, kann auch nur die Log-Datei veraltet sein. Lösche dann die gesamte Datei oder aber zumindest Einträge mit folgendem Präfix aus der Log-Datei: ';
+  }
+
+  get warning_unknown_checkpoint_id() {
+    return '<b>Warnung:</b> Die Log-Datei enthält unbekannte Checkpoints. Grund hierfür könnte eine falsche Konfiguration oder veraltete Log-Datei sein.<br><b>Behebung:</b> Prüfe mit <a href="../setup.html"><tt>../setup.html</tt></a>, ob die aktivierten Checkpoints im Abschnitt Statistiken korrekt eingestellt sind. Passe die Konfiguration ggf. an. Ist die Konfiguration korrekt, kann auch lediglich die Log-Datei veraltet sein. Lösche dann die gesamte Datei oder aber zumindest die Einträge der Log-Datei, die folgendermaßen enden: ';
   }
 
 }

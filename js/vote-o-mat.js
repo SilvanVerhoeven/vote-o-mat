@@ -1,9 +1,23 @@
-var data = null;
+const CONFIG_FILE = 'config/data.json';
+const SETUP_FILE = '../config/setup.json';
+const DEFAULT_STATISTICS_PATH = '../vom-statistics/'
+
+function img(file_name) {
+	return '../img/'+file_name;
+}
+
+var setup = null;
+var config = null;
 var answers = null;
 var currentThesis = 0;
 var timeout = null;
 var showSwypeInfo = true;
+
+var alreadyHit = {};  // for statistics: storage for remembering already hit points of the application
+
+// translation instance, see lang/*.js files
 var t = new T();
+
 $(function () {
 	translate();
 	$('#btn-start').prop('disabled', true);
@@ -19,26 +33,89 @@ function translate() {
 	}
 }
 
+function formatURL(url) {
+	return (url.substr(-1) != '/') ? url + '/' : url;
+}
+
+/**
+ * Send notification about hitting this point in the application
+ * @param {string} id - Identifier for the point in the application
+ * @return 0 if successful, 1 if an error occured
+ */
+function hit(id) {
+	if (alreadyHit[id] 						 // don't count already entered points twice
+		|| !setup.statistics 				 // make sure statistics are enabled
+		|| setup.statistics.checkpoints[id] === undefined // make sure currently entered point should be tracked in statistics
+		) return;
+	alreadyHit[id] = true;
+
+	id = setup.statistics.checkpoints[id] || id;
+	prefix = config.statistics.group ? config.statistics.group.prefix || '' : '';
+	checkpointId = prefix+id;
+	const hitUrl = `${formatURL(setup.statistics.url || DEFAULT_STATISTICS_PATH)}hit.php?cp=${encodeURIComponent(checkpointId)}`;
+	$.ajax({
+		url: hitUrl,
+		type: "GET",
+		success: (answer) => {
+			if (answer !== 'Log successful') {
+				$('#global-error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_statistics_general + '</div>');
+				console.log(`Statistics Module answers: ${answer}`);
+				return 1;
+			}
+
+			return 0;
+		},
+		error: (request, error, exception) => {
+			if (request.status === 404) {
+				$('#global-error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_statistics_module_not_found + '</div>');
+			} else {
+				$('#global-error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_statistics_general + '</div>');
+			}
+			return 1;
+		}
+	});
+}
+
+/**
+ * Resets hits when vote-o-mat is restarted without reloading
+ */
+function initializeHitsOnRestart() {
+	alreadyHit.start = false;
+	alreadyHit.result = false;
+}
+
 function init() {
-	$.getJSON("config/data.json")
+	$.getJSON(SETUP_FILE)
 		.done(function (jsondata) {
-			data = jsondata;
-			currentThesis = 0;
-			initOnclickCallbacks();
-			initAnswers();
-			initResultDetails();
-			recreatePagination();
-			loadThesis();
-			$('#btn-start').prop('disabled', false);
+			setup = jsondata;
+			setBranding(jsondata.branding);
+			setActions(jsondata.actions);
 		})
 		.fail(function () {
-			$('#error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_loading_config_file + '</div>');
+			$('#error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_loading_setup_file + '</div>');
+		})
+		.then(function () {
+			$.getJSON(CONFIG_FILE)
+				.done(function (jsondata) {
+					config = jsondata;
+					currentThesis = 0;
+					hit('enter');
+					initOnclickCallbacks();
+					initAnswers();
+					initResultDetails();
+					recreatePagination();
+					loadThesis();
+					$('#btn-start').prop('disabled', false);
+				})
+				.fail(function () {
+					$('#error-msg').html('<div class="alert alert-danger" role="alert">' + t.error_loading_config_file + '</div>');
+				});
 		});
 }
 
 function initOnclickCallbacks() {
 	$('#swype-info').off('click').click(function () { hideSwypeInfo(); });
-	$('#btn-start').off('click').click(function () { showMahlowat(); });
+	$('#btn-start').off('click').click(function () { showVoteOMat(); });
 	$('#btn-start-show-qa').off('click').click(function () { showQA(); });
 	$('#btn-toggle-thesis-more').off('click').click(function () { toggleThesisMore(); });
 	$('#btn-important').off('click').click(function () { toggleImportant(); });
@@ -46,9 +123,9 @@ function initOnclickCallbacks() {
 	$('#btn-neutral').off('click').click(function () { doNeutral(); });
 	$('#btn-no').off('click').click(function () { doNo(); });
 	$('#btn-skip').off('click').click(function () { doSkip(); });
-	$('#btn-mahlowat-show-start').off('click').click(function () { showStart(); });
-	$('#btn-mahlowat-show-qa').off('click').click(function () { showQA(); });
-	$('#btn-mahlowat-skip-remaining-theses').off('click').click(function () { showResults(); });
+	$('#btn-vote-o-mat-show-start').off('click').click(function () { showStart(); });
+	$('#btn-vote-o-mat-show-qa').off('click').click(function () { showQA(); });
+	$('#btn-vote-o-mat-skip-remaining-theses').off('click').click(function () { showResults(); });
 	$('#btn-results-show-start').off('click').click(function () { showStart(); });
 	$('#btn-results-show-qa').off('click').click(function () { showQA(); });
 }
@@ -61,8 +138,68 @@ function initHammer() {
 
 	var resultHammer = new Hammer(document.getElementById("result-summary-row"));
 	resultHammer.on('swiperight', function (ev) {
-		showMahlowat();
+		showVoteOMat();
 	});
+}
+
+function setBranding(branding) {
+	$('.branding-container').html(getBrandingHTML(branding));
+	$('.branding-logo-placeholder').replaceWith(function () {
+		return getBrandingLogoHTML(branding, $(this).attr("style"));
+	});
+}
+
+function setActions(actions) {
+	if (!actions) return;
+	if (!!actions.top) $('#actions-top').replaceWith(getActionsHTML('top', actions.top));
+	if (!!actions.bottom) $('#actions-bottom').replaceWith(getActionsHTML('bottom', actions.bottom));
+}
+
+function getBrandingHTML(branding) {
+	let brandingText = branding.appendix || "";
+	if (!brandingText) return getBrandingLogoHTML(branding, "height: 1.5em; margin-top: -0.25em");
+	return `${brandingText} ${getBrandingLogoHTML(branding, "height: 1.5em; margin-top: -0.25em")}`
+}
+
+function getBrandingLogoHTML(branding, style="") {
+	if (!branding.logo) return "";
+	let brandingLogo = `<img src="${img(branding.logo)}" alt="Brand Logo" style="${style}"/>`;
+
+	if (!branding.url) return brandingLogo;
+
+	return `<a href="${branding.url}" title="Website öffnen" target="_blank">${brandingLogo}</a>`;
+}
+
+function getActionsHTML(position, action) {
+	if (!action) return "";
+
+	const title = !!t[`actions_${position}_title`] ? `<h4>${t[`actions_${position}_title`]}</h4>` : '';
+	const text = !!t[`actions_${position}_text`] ? `<span>${t[`actions_${position}_text`]}</span>` : '';
+	
+	let textDiv = '';
+	if (title || text) {
+		textDiv = 	`<div style="text-align: left; margin: 0.5rem 0">
+						${title}
+						${text}
+					</div>`;
+	}
+	
+	let button = '';
+	if (t[`actions_${position}_button_caption`] && t[`actions_${position}_button_link`]) {
+		let btnClass = action.includes('text-dark') ? 'btn-outline-dark' : 'btn-outline-light';
+		button = `<div style="margin: 0.5rem 0">
+			<button id="actions-${position}-button" class="btn btn-lg ${btnClass}" onClick="window.open('${t[`actions_${position}_button_link`]}', '_blank')">
+				${t[`actions_${position}_button_caption`]}
+			</button>
+		</div>`;
+	}
+
+	const actionDiv = `<div id="actions-${position}" class="${action}" style="border-radius: .25rem; display: flex; flex-wrap: wrap; justify-content: space-evenly; align-items: center; padding: 1rem 0; margin: 1rem 0 1.5rem">
+							${textDiv}
+							${button}
+						</div>`
+
+	return actionDiv;
 }
 
 function showQA() {
@@ -71,13 +208,13 @@ function showQA() {
 
 function recreatePagination() {
 	$('#pagination').empty();
-	for (let i = 0; i < Object.keys(data.theses).length; i++) {
+	for (let i = 0; i < Object.keys(config.theses).length; i++) {
 		$('#pagination').append('<li class="page-item"><button class="page-link' + getPaginationClasses(i) + '" onclick="loadThesisNumber(' + i + ')">' + (i + 1) + '</button></li>')
 	}
 }
 
 function updateProgressBar() {
-	let percentage = Math.round(100 * (currentThesis + 1) / Object.keys(data.theses).length);
+	let percentage = Math.round(100 * (currentThesis + 1) / Object.keys(config.theses).length);
 	$('#overall-progress-bar').css('width', "" + percentage + "%");
 }
 
@@ -239,7 +376,7 @@ function styleAnswerButtons() {
 
 function initAnswers() {
 	answers = [];
-	for (let i = 0; i < Object.keys(data.theses).length; i++) {
+	for (let i = 0; i < Object.keys(config.theses).length; i++) {
 		answers.push('d');
 	}
 }
@@ -251,21 +388,21 @@ function loadThesisNumber(number) {
 
 function loadThesis() {
 	if (currentThesis < 0) { currentThesis = 0; }
-	if (currentThesis >= Object.keys(data.theses).length) { currentThesis = Object.keys(data.theses).length - 1; }
+	if (currentThesis >= Object.keys(config.theses).length) { currentThesis = Object.keys(config.theses).length - 1; }
 
 	let thesis_id = "" + currentThesis;
 	$('#btn-toggle-thesis-more').fadeOut(200);
 	$('#thesis-text').fadeOut(200, function () {
-		$('#thesis-text').text(data.theses[thesis_id].l);
+		$('#thesis-text').text(config.theses[thesis_id].l);
 		$('#thesis-text').fadeIn(200);
-		if (data.theses[thesis_id].x !== "") {
+		if (config.theses[thesis_id].x !== "") {
 			$('#btn-toggle-thesis-more').fadeIn(200);
 		}
 	});
 	$('#thesis-number').text(t.thesis_number(currentThesis + 1));
-	//			$('#thesis-text').text(data.theses[thesis_id].l);
+	//			$('#thesis-text').text(config.theses[thesis_id].l);
 	$('#thesis-more').hide();
-	$('#thesis-more').text(data.theses[thesis_id].x);
+	$('#thesis-more').text(config.theses[thesis_id].x);
 
 	styleAnswerButtons();
 	updateProgressBar();
@@ -281,7 +418,7 @@ function nextThesisAfterSelection() {
 
 function nextThesis() {
 	currentThesis++;
-	if (currentThesis == Object.keys(data.theses).length) {
+	if (currentThesis == Object.keys(config.theses).length) {
 		showResults();
 	} else {
 		loadThesis();
@@ -299,22 +436,24 @@ function showResults() {
 	for (let i = 0; i < answers.length; i++) {
 		maxAchievablePoints += calculatePairPoints(answers[i], answers[i]);
 	}
-	for (list_id in data.lists) {
+	for (list_id in config.lists) {
 		let pointsForList = 0;
 		for (let i = 0; i < answers.length; i++) {
 			let thesis_id = "" + i;
-			pointsForList += calculatePairPoints(answers[i], data.answers[list_id][thesis_id].selection);
+			pointsForList += calculatePairPoints(answers[i], config.answers[list_id][thesis_id].selection);
 		}
-		let list = data.lists[list_id].name_x;
-		results.push([list, pointsForList]);
+		let list = config.lists[list_id].name;
+		let list_abbr = config.lists[list_id].name_x;
+		results.push([list, list_abbr, pointsForList]);
 	}
 	results.sort(function (a, b) { if (a[1] == b[1]) { return 0; } else if (a[1] > b[1]) return -1; return 1; })
 	$('#result-summary').empty();
 	for (let i=0; i < results.length; i++) {
 		let result = results[i];
 		let list = result[0];
-		let pointsForList = result[1];
-		addResultSummary(list, pointsForList, maxAchievablePoints);
+		let list_abbr = result[1];
+		let pointsForList = result[2];
+		addResultSummary(list, list_abbr, pointsForList, maxAchievablePoints);
 	}
 	updateResultDetailPlaceholders();
 	showResult();
@@ -328,7 +467,7 @@ function updateResultDetailPlaceholders() {
 	}
 }
 
-function addResultSummary(list, pointsForList, maxAchievablePoints) {
+function addResultSummary(list, list_abbr, pointsForList, maxAchievablePoints) {
 	let percentage = Math.round(pointsForList / maxAchievablePoints * 100);
 	let remaining_percentage = 100 - percentage;
 	let text_percentage = t.achieved_points_text(pointsForList, maxAchievablePoints);
@@ -338,14 +477,14 @@ function addResultSummary(list, pointsForList, maxAchievablePoints) {
 		text_percentage = '';
 	}
 
-	$('#result-summary').append(getSummaryProgressBar(list, percentage, remaining_percentage, text_percentage, text_remaining_percentage));
+	$('#result-summary').append(getSummaryProgressBar(list, list_abbr, percentage, remaining_percentage, text_percentage, text_remaining_percentage));
 }
 
-function getSummaryProgressBar(list, percentage, remaining_percentage, text_percentage, text_remaining_percentage) {
-	let bar = '<div class="row result-summary-row">\
-				<div class="col-12 col-md">'+ list + '</div>\
-				<div class="col-12 col-md-10">\
-					<div class="progress" style="height: 2rem;">';
+function getSummaryProgressBar(list, list_abbr, percentage, remaining_percentage, text_percentage, text_remaining_percentage) {
+	let bar = `<div class="row result-summary-row">\
+				<div class="col-12 col-md-6">${list}${list !== list_abbr ? `<em> (${list_abbr})</em>` : ''}</div>\
+				<div class="col-12 col-md-6">\
+					<div class="progress" style="height: 2rem;">`;
 	if (percentage > 0) {
 		bar += '<div class="progress-bar main-progress-bar" role="progressbar" style="width: ' + percentage +
 			'%" aria-valuenow="' + percentage + '" aria-valuemin="0" aria-valuemax="100"> ' + text_percentage + '</div>';
@@ -413,30 +552,30 @@ function toggleThesisMore() {
 
 function initResultDetails() {
 	$('#result-detail').empty();
-	for (thesis_id in data.theses) {
+	for (thesis_id in config.theses) {
 		let thesisNumber = parseInt(thesis_id) + 1;
 		let text = '<div class="card result-detail-card">\
 				<div class="card-header result-detail-header">\
-					'+ data.theses[thesis_id].s + '\
+					'+ config.theses[thesis_id].s + '\
 					<small>'+ t.thesis_number(thesisNumber) + '</small>\
 					<span class="float-right"><i class="far fa-hand-point-up"></i></span>\
 				</div>\
 				<div class="result-details">\
 					<div class="card-body">\
-						<p class="card-text lead">'+ data.theses[thesis_id].l + '</p>\
+						<p class="card-text lead">'+ config.theses[thesis_id].l + '</p>\
 					</div>\
 					<ul class="list-group list-group-flush">';
-		for (list_id in data.lists) {
+		for (list_id in config.lists) {
 			text += '<li class="list-group-item">\
-							'+ getSelectionMarker(data.lists[list_id].name, data.answers[list_id][thesis_id].selection) + '\
-							'+ statementOrDefault(data.answers[list_id][thesis_id].statement) + '</li>';
+							'+ getSelectionMarker(config.lists[list_id].name, config.answers[list_id][thesis_id].selection) + '\
+							'+ statementOrDefault(config.answers[list_id][thesis_id].statement) + '</li>';
 		}
 		text += '</ul>\
 				</div>\
 				<div class="card-footer result-detail-footer">\
 					<span class="badge badge-secondary" id="placeholder-your-choice-'+ thesis_id + '">PLACEHOLDER</span> | ';
-		for (list_id in data.lists) {
-			text += getSelectionMarker(data.lists[list_id].name_x, data.answers[list_id][thesis_id].selection);
+		for (list_id in config.lists) {
+			text += getSelectionMarker(config.lists[list_id].name_x, config.answers[list_id][thesis_id].selection);
 		}
 		text += '</div>\
 				</div>'
@@ -476,29 +615,32 @@ function getSelectionMarker(list, selection) {
 
 function showStart() {
 	init();
-	$("#mahlowat,#result").hide();
+	$("#vote-o-mat,#result").hide();
 	$("#start").show();
+	initializeHitsOnRestart();
 }
 
-function showMahlowatFirstThesis() {
+function showVoteOMatFirstThesis() {
 	currentThesis = 0;
-	showMahlowat();
+	showVoteOMat();
 }
-function showMahlowat() {
+function showVoteOMat() {
 	loadThesis();
 	initResultDetails();
 	$("#start,#result").hide();
-	$("#mahlowat").fadeIn();
+	$("#vote-o-mat").fadeIn();
 	if (showSwypeInfo) {
 		showSwypeInfo = false;
 		$("#swype-info").show();
 	}
+	hit('start');
 }
 
 function showResult() {
-	$("#start,#mahlowat").hide();
+	$("#start,#vote-o-mat").hide();
 	$("#result").fadeIn();
 	animateBars();
+	hit('result');
 }
 
 function animateBars() {

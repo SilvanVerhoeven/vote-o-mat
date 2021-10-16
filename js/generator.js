@@ -1,3 +1,8 @@
+const SETUP_FILE = '../config/setup.json';
+const CONFIG_FILE = 'config/data.json';
+
+let setup = null;
+
 function Singleton() {
 	if (typeof Singleton.instance === 'object') {
 		return Singleton.instance;
@@ -6,6 +11,7 @@ function Singleton() {
 	this.theses = null;
 	this.lists = null;
 	this.answers = null;
+	this.statistics = null;
 	this.activeThesis = 0;
 	this.activeList = 0;
 
@@ -13,25 +19,35 @@ function Singleton() {
 }
 
 function deleteme(self) {
-	$(self).parent().parent().hide(400);
-	window.setTimeout(function () { $(self).parent().parent().remove(); }, 500);
+	const listCard = $(self).parent().parent().parent();
+	listCard.hide(400);
+	window.setTimeout(function () { listCard.remove(); }, 500);
 }
 
 function moveup(self) {
-	$(self).parent().parent().hide(400);
+	const listCard = $(self).parent().parent().parent();
+	listCard.hide(400);
 	window.setTimeout(function () {
-		$(self).parent().parent().insertBefore($(self).parent().parent().prev(".singlethesis"));
-		$(self).parent().parent().show(400);
+		listCard.insertBefore(listCard.prev(".listcard"));
+		listCard.show(400);
 	}, 400);
 
 }
 
 function movedown(self) {
-	$(self).parent().parent().hide(400);
+	const listCard = $(self).parent().parent().parent();
+	listCard.hide(400);
 	window.setTimeout(function () {
-		$(self).parent().parent().insertAfter($(self).parent().parent().next(".singlethesis"));
-		$(self).parent().parent().show(400);
+		listCard.insertAfter(listCard.next(".listcard"));
+		listCard.show(400);
 	}, 400);
+}
+
+// needs to be exluded from readData() as it is called later in the configuration process
+function readStatisticsData() {
+	Singleton.instance.statistics = {};
+	const selectedGroup = !setup ? {} : setup.statistics.groups[$('#input_group_select').val()] || {};
+	Singleton.instance.statistics.group = selectedGroup;
 }
 
 function readData() {
@@ -108,25 +124,27 @@ function generateEmptyThesis() {
 }
 
 function generateThesis(name, shortname, explanation) {
-	var thesisdiv = '<div class="singlethesis">' +
-		'	<div class="form-group">' +
-		'		<label>These</label>' +
-		'		<input type="text" class="form-control input_thesis" placeholder="These" value="' + name + '">' +
-		'	</div>' +
-		'	<div class="form-group">' +
-		'		<label>These (Kurzname)</label>' +
-		'		<input type="text" class="form-control input_thesis_short" placeholder="These (Kurzname)" value="' + shortname + '">' +
-		'	</div>' +
-		'	<div class="form-group">' +
-		'		<label>Erläuterung</label>' +
-		'		<input type="text" class="form-control input_explanation" placeholder="Erläuterung" value="' + explanation + '">' +
-		'	</div>' +
-		'	<div class="form-group">' +
-		'		<button type="button" class="btn btn-danger" onclick="deleteme(this)">Diese These löschen</button>' +
-		'		<button type="button" class="btn btn-default" onclick="moveup(this)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Diese These nach <strong>oben</strong> verschieben</button>' +
-		'		<button type="button" class="btn btn-default" onclick="movedown(this)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Diese These nach <strong>unten</strong> verschieben</button>' +
-		'	</div>' +
-		'</div>';
+	var thesisdiv = `<div class="card bg-light listcard">
+		<div class="card-body">
+			<div class="form-group">
+				<label>These</label>
+				<input type="text" class="form-control input_thesis" placeholder="These" value="${name}">
+			</div>
+			<div class="form-group">
+				<label>These (Kurzname)</label>
+				<input type="text" class="form-control input_thesis_short" placeholder="These (Kurzname)" value="${shortname}">
+			</div>
+			<div class="form-group">
+				<label>Erläuterung</label>
+				<input type="text" class="form-control input_explanation" placeholder="Erläuterung" value="${explanation}">
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-danger" onclick="deleteme(this)">Diese These löschen</button>
+				<button type="button" class="btn btn-default" onclick="moveup(this)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Diese These nach <strong>oben</strong> verschieben</button>
+				<button type="button" class="btn btn-default" onclick="movedown(this)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Diese These nach <strong>unten</strong> verschieben</button>
+			</div>
+		</div>
+	</div>`;
 
 	$('#theses_list').append(thesisdiv);
 }
@@ -136,90 +154,189 @@ function generateEmptyList() {
 }
 
 function generateList(name, shortname) {
-	var listdiv = '<div class="singlelist">' +
-		'	<div class="form-group">' +
-		'		<label>Listenname</label>' +
-		'		<input type="text" class="form-control input_list" placeholder="Listenname" value="' + name + '">' +
-		'	</div>' +
-		'	<div class="form-group">' +
-		'		<label>Listenname (kurz)</label>' +
-		'		<input type="text" class="form-control input_list_short" placeholder="Listenname (kurz)" value="' + shortname + '">' +
-		'	</div>' +
-		'	<div class="form-group">' +
-		'		<button type="button" class="btn btn-danger" onclick="deleteme(this)">Diese Liste löschen</button>' +
-		'		<button type="button" class="btn btn-default" onclick="moveup(this)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Diese Liste nach <strong>oben</strong> verschieben</button>' +
-		'		<button type="button" class="btn btn-default" onclick="movedown(this)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Diese Liste nach <strong>unten</strong> verschieben</button>' +
-		'	</div>' +
-		'</div>';
+	var listdiv = `<div class="card bg-light listcard">
+		<div class="card-body">
+			<div class="form-group">
+				<label>Listenname</label>
+				<input type="text" class="form-control input_list" placeholder="Listenname" value="${name}">
+			</div>
+			<div class="form-group">
+				<label>Listenname (kurz)</label>
+				<input type="text" class="form-control input_list_short" placeholder="Listenname (kurz)" value="${shortname}">
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-danger" onclick="deleteme(this)">Diese Liste löschen</button>
+				<button type="button" class="btn btn-default" onclick="moveup(this)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Diese Liste nach <strong>oben</strong> verschieben</button>
+				<button type="button" class="btn btn-default" onclick="movedown(this)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Diese Liste nach <strong>unten</strong> verschieben</button>
+			</div>
+		</div>
+	</div>`;
 
 	$('#lists_list').append(listdiv);
+}
+
+function generateGroup(index, name) {
+	var groupSelector = `<option value="${index}">${name}</option>`;
+	$('#input_group_select').append(groupSelector);
+}
+
+function initializeStatisticsInputs () {
+	if (!setup || !setup.statistics || !setup.statistics.groups) return;
+	const groups = setup.statistics.groups;
+	if (groups.length > 0) {
+		$('#input_group_select').prop('disabled', false);
+		$('#input_group_select').html('<option>Sprache wählen...</option>');
+	}
+	groups.forEach((group, index) => {
+		generateGroup(index, group.name);
+	});
+
+	/* preselect language if already configured */
+	if (!Singleton.instance.statistics.group) return;
+	const indexOfSelectedGroup = groups.findIndex(
+		group => group.name === Singleton.instance.statistics.group.name);
+	if (indexOfSelectedGroup >= 0) $('#input_group_select').val(indexOfSelectedGroup);
+}
+
+function initializeConfig() {
+	Singleton.instance.activeThesis = 0;
+	Singleton.instance.activeList = 0;
+
+	generateTheses();
+	generateLists();
+	initializeStatisticsInputs();
 }
 
 $(function () {
 	var singleton = new Singleton();
 
-	$.getJSON("config/data.json", function (data) {
-		data.activeThesis = 0;
-		data.activeList = 0;
-		Singleton.instance = data;
-
-
-		generateTheses();
-		generateLists();
+	$.getJSON(SETUP_FILE, function (setupJSON) {
+		setup = setupJSON;
+	})
+	.fail(() => showConfigAlternative())
+	.then(() => {
+		$.getJSON(CONFIG_FILE, function (data) {
+			Singleton.instance = data;
+			initializeConfig();
+		});
 	});
 
 
-	$('#btn_add_list').click(function () {
+	$('.btn_add_list').click(function () {
 		generateEmptyList();
 	});
 
-	$('#btn_add_thesis').click(function () {
+	$('.btn_add_thesis').click(function () {
 		generateEmptyThesis();
 	});
 
 	$('#theses_input').hide();
 	$('#lists_input').hide();
 	$('#data_input').hide();
+	$('#statistics_input').hide();
 	$('#encodeddata').hide();
 
 
-	$('#btn_start_next').click(function () {
+	$('.btn_start_next').click(function () {
+		var setupJSONText = $('#alternativeSetupInput').val() || '';
+		var configJSONText = $('#alternativeConfigInput').val() || '';
+		if (setupJSONText) setup = JSON.parse(setupJSONText);
+		if (configJSONText) Singleton.instance = JSON.parse(configJSONText);
+		if (setupJSONText || configJSONText) {
+			initializeConfig();
+		}
 		$('#start').hide(500);
 		$('#theses_input').show(500);
 	});
 
-	$('#btn_step_1_next').click(function () {
+	$('.btn_step_1_next').click(function () {
 		$('#theses_input').hide(500);
 		$('#lists_input').show(500);
 	});
 
-	$('#btn_step_2_next').click(function () {
+	$('.btn_step_2_next').click(function () {
 		createStep3();
 		$('#lists_input').hide(500);
 		$('#data_input').show(500);
 	});
 
-	$('#btn_step_2_prev').click(function () {
+	$('.btn_step_3_next').click(function () {
+		$('#statistics_input').show(500);
+		$('#data_input').hide(500);
+	});
+
+	$('.btn_step_2_prev').click(function () {
 		$('#theses_input').show(500);
 		$('#lists_input').hide(500);
 	});
 
-	$('#btn_step_3_prev').click(function () {
+	$('.btn_step_3_prev').click(function () {
 		$('#lists_input').show(500);
 		$('#data_input').hide(500);
 	});
 
-	$('#generate').click(function () {
+	$('.btn_step_4_prev').click(function () {
+		$('#data_input').show(500);
+		$('#statistics_input').hide(500);
+	});
+
+	$('.btn_generate_prev').click(function () {
+		$('#statistics_input').show(500);
+		$('#encodeddata').hide(500);
+	});
+
+	$('.btn_generate').click(function () {
+		readStatisticsData();
 		var copy = JSON.parse(JSON.stringify(Singleton.instance))
 		delete copy.activeThesis;
 		delete copy.activeList;
 		var jsonstring = JSON.stringify(copy, null, '\t');
 		$('#output_encodeddata').val(jsonstring);
-		$('#data_input').hide(500);
+		$('#statistics_input').hide(500);
 		$('#encodeddata').show(500);
 	});
 
+	$('.btn_copy_encodeddata').click(function () {
+		var textArea = $('#output_encodeddata');
+		textArea.focus();
+		textArea.select();
+		var encodedData = textArea.val();
+		navigator.clipboard.writeText(encodedData).then(() => {
+			$('.btn_copy_encodeddata').popover('show');
+			window.setTimeout(() => $('.btn_copy_encodeddata').popover('hide'), 5000);
+		});
+	});	
+
 });
+
+function showConfigAlternative () {
+	var alternativeConfigInput =
+	`<div class="alert alert-primary alert-dismissible fade show" role="alert">
+		<p>Dein Browser scheint das Laden von Konfigurationsdateien nicht zu erlauben. Solltest du bereits eine <code>setup.json</code>- und/oder eine <code>data.json</code>-Konfigurationsdatei angelegt haben und diese nun anpassen wollen, kopiere den Inhalt der Datei(en) in das jeweilige Textfeld und fahre mit dem untenstehenden Button fort.</p>
+		<p>Wenn du gerade zum ersten Mal eine Konfiguration erstellen willst, fahre direkt mit dem Button unten fort.</p>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div class="form-row">
+			<div class="col">
+				<div class="form-group">
+					<label>Inhalt der <code>setup.json</code> (optional):</label>
+					<textarea class="form-control" id="alternativeSetupInput" rows="5"></textarea>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<div class="form-group">
+						<label>Inhalt der <code>data.json</code> (optional):</label>
+						<textarea class="form-control" id="alternativeConfigInput" rows="5"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>`;
+
+	$('.btn_start_next').parent().before(alternativeConfigInput);
+}
 
 function createStep3() {
 	readData();

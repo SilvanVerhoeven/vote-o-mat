@@ -12,9 +12,10 @@ function () {
   function T() {
     _classCallCheck(this, T);
 
-    this.page_title = "Mahlowat";
+    this.page_title = "Vote-O-Mat";
+    this.vote_o_mat_title = "Vote-O-Mat 2021";
     this.qa_modal_title = "Questions &amp; Answers";
-    this.qa_modal_body = '<h4>Who is behind the Mahlowat?</h4>\
+    this.qa_modal_body = '<h4>Who is behind the Vote-O-Mat?</h4>\
 					<p>Lorem Ipsum.</p>\
 \
 					<h4>Who developed the theses?</h4>\
@@ -46,19 +47,19 @@ function () {
 					<h4>I have spotted an error in your content!</h4>\
 					<p>Please tell us. Who is »us«? See above.</p>\
 \
-					<h4>Who programmed the Mahlowat?</h4>\
-					<p><a href="https://github.com/hszemi/mahlowat">Behold!</a>. By the way: the Mahlowat is free software!</p>\
+					<h4>Who programmed the Vote-O-Mat?</h4>\
+					<p><a href="https://github.com/SilvanVerhoeven/vote-o-mat">Behold!</a>. By the way: the Vote-O-Mat is free software!</p>\
 \
 					<h4>I found a programming error!!</h4>\
-					<p>Oh no! If you <a href="https://github.com/hszemi/mahlowat">report the bug</a>, it might get fixed.</p>';
+					<p>Oh no! If you <a href="https://github.com/SilvanVerhoeven/vote-o-mat">report the bug</a>, it might get fixed.</p>';
     this.btn_qa_modal_close = "Close";
     this.swype_info_message_text = "Swype to switch between theses manually";
     this.btn_swype_info_ok = "OK";
-    this.start_subtitle = "Mahlowat is a voting advice application. It's a tool, not your mum.";
-    this.start_explanatory_text = "<p>The Mahlowat permits you to compare your opinion on selected theses with the opinions of\
+    this.start_subtitle = "Vote-O-Mat is a voting advice application. It's a tool, not your mum.";
+    this.start_explanatory_text = "<p>The Vote-O-Mat permits you to compare your opinion on selected theses with the opinions of\
 		groups that participate in $ELECTION.</p>\
 					<p>The views expressed in the groups' statements are their own.</p>";
-    this.btn_start = "Start the Mahlowat!";
+    this.btn_start = "Start the Vote-O-Mat!";
     this.btn_start_show_qa = "Questions &amp; Answers";
     this.btn_toggle_thesis_more_text = "Explanation";
     this.btn_important = "Count double";
@@ -66,15 +67,15 @@ function () {
     this.btn_neutral_text = "Neutral";
     this.btn_no_text = "No";
     this.btn_skip_text = "Skip";
-    this.btn_mahlowat_show_start = "Back to the welcome page";
-    this.btn_mahlowat_show_qa = "Questions &amp; Answers";
-    this.btn_mahlowat_skip_remaining_theses = "Skip all remaining theses and evaluate the current selections";
-    this.title_results = "Result";
-    this.title_results_summary = "Summary";
+    this.btn_vote_o_mat_show_start = "Back to the welcome page";
+    this.btn_vote_o_mat_show_qa = "Questions &amp; Answers";
+    this.btn_vote_o_mat_skip_remaining_theses = "Skip all remaining theses and evaluate the current selections";
+    this.results_title = "Result";
+    this.results_title_summary = "Summary";
     this.text_result_below_summary = '<small>Don\'t like your results?\
-				<button class="btn btn-sm btn-light" onclick="showMahlowatFirstThesis()">Change the answers or the weights!</button>\
+				<button class="btn btn-sm btn-light" onclick="showVoteOMatFirstThesis()">Change the answers or the weights!</button>\
 			</small>';
-    this.title_results_details = "";
+    this.results_title_details = "";
     this.btn_results_show_start = "Back to the welcome page";
     this.btn_results_show_qa = "Questions &amp; Answers";
   }
