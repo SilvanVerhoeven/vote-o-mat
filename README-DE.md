@@ -4,7 +4,13 @@
 
 Vote-O-Mat ist eine funktionsreichere Version des Wahlpositionsvergleichswerkzeugs [mahlowat](https://github.com/HSZemi/mahlowat). Beide ermöglichen es den Benutzenden, ihre Meinung zu ausgewählten Thesen mit den Meinungen von Gruppen oder Einzelpersonen zu vergleichen, die an einer Wahl teilnehmen.
 
-Vote-O-Mat macht es einfacher *mahlowat* in mehreren Sprachen anzubieten, das Aussehen an eine Marke("Branding") anzupassen und kann anonyme Nutzungsstatistiken anbieten ([siehe Infos zum Datenschutz](#privacy)). Wenn du keine dieser Funktionen benötigen, bist du mit [mahlowat](https://github.com/HSZemi/mahlowat) wahrscheinlich besser beraten.
+Vote-O-Mat macht es einfacher
+
+- *mahlowat* in mehreren Sprachen anzubieten
+- das Aussehen an eine Marke ("Branding") anzupassen
+- anonyme Nutzungsstatistiken anzubieten ([siehe Infos zum Datenschutz](#privacy))
+
+Wenn du keine dieser Funktionen benötigst, solltest du vermutlich eher [mahlowat](https://github.com/HSZemi/mahlowat) nutzen. In diesen Fällen ist das Aufsetzen von mahlowat einfacher.
 
 # Allgemeine Vorgehensweise
 
