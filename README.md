@@ -156,7 +156,8 @@ The points for the groups in the results at the end are calculated as follows:
 - The user's answers are compared to each group's answers.
 - The group gains 2 points for each thesis where their answer matches the user's.
 - A slight deviation (yes/neutral or neutral/no) gains the group still 1 point.
-- If the answers are contrary or if a group has no position on a thesis, the group gains no point.
+- If the answers are contrary or 
+group has no position on a thesis, the group gains no point.
 - A thesis that the user skipped gains no one any point. The maximum number of points possible decreases.
 - A thesis that the user counts double gets groups twice the points (0/2/4). This increases the maximum number of points possible.
 
@@ -166,7 +167,7 @@ The points for the groups in the results at the end are calculated as follows:
 
 Vote-O-Mat comes with three languages: German (de\_de, default), English (en\_gb) and French (fr\_fr).
 
-If you want to change the display language if a Vote-O-Mat instance, you have to do a tiny edit in `index.html`. Go to the very bottom, where you will find this section:
+If you want to change the display language of a Vote-O-Mat instance, you have to do a tiny edit in `index.html`. Go to the very bottom, where you will find this section:
 ```
 <!-- Select (uncomment) exactly one of the following languages-->
 <script src="../lang/de_de.js"></script>
