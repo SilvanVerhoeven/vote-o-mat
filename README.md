@@ -110,7 +110,7 @@ I bet you already guessed it, but for completeness: like the setup tool, the con
 
 ## Finishing Touches
 
-Congratulations, you are through the vast majory of the setup process :)
+Congratulations, you are through the vast majority of the setup process :)
 
 If you have not [uploaded the files](#upload), do so now.
 
