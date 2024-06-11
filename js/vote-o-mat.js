@@ -175,7 +175,7 @@ function getActionsHTML(position, action) {
 
 	const title = !!t[`actions_${position}_title`] ? `<h4>${t[`actions_${position}_title`]}</h4>` : '';
 	const text = !!t[`actions_${position}_text`] ? `<span>${t[`actions_${position}_text`]}</span>` : '';
-	
+
 	let textDiv = '';
 	if (title || text) {
 		textDiv = 	`<div style="text-align: left; margin: 0.5rem 0">
@@ -183,7 +183,7 @@ function getActionsHTML(position, action) {
 						${text}
 					</div>`;
 	}
-	
+
 	let button = '';
 	if (t[`actions_${position}_button_caption`] && t[`actions_${position}_button_link`]) {
 		let btnClass = action.includes('text-dark') ? 'btn-outline-dark' : 'btn-outline-light';
@@ -446,7 +446,7 @@ function showResults() {
 		let list_abbr = config.lists[list_id].name_x;
 		results.push([list, list_abbr, pointsForList]);
 	}
-	results.sort(function (a, b) { if (a[1] == b[1]) { return 0; } else if (a[1] > b[1]) return -1; return 1; })
+    results.sort(function (a, b) {return b[2] - a[2];});
 	$('#result-summary').empty();
 	for (let i=0; i < results.length; i++) {
 		let result = results[i];
