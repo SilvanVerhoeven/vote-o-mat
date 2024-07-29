@@ -446,7 +446,7 @@ function showResults() {
 		let list_abbr = config.lists[list_id].name_x;
 		results.push([list, list_abbr, pointsForList]);
 	}
-    results.sort(function (a, b) {return b[2] - a[2];});
+	results.sort(function (a, b) {return b[2] - a[2];});
 	$('#result-summary').empty();
 	for (let i=0; i < results.length; i++) {
 		let result = results[i];
