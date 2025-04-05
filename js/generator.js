@@ -291,21 +291,11 @@ $(function () {
 		delete copy.activeThesis;
 		delete copy.activeList;
 		var jsonstring = JSON.stringify(copy, null, '\t');
-		$('#output_encodeddata').val(jsonstring);
+		var blob = new Blob([jsonstring], { type: "application/json" });
+		$('.btn_download_encodeddata').attr("href", URL.createObjectURL(blob));
 		$('#statistics_input').hide(500);
 		$('#encodeddata').show(500);
 	});
-
-	$('.btn_copy_encodeddata').click(function () {
-		var textArea = $('#output_encodeddata');
-		textArea.focus();
-		textArea.select();
-		var encodedData = textArea.val();
-		navigator.clipboard.writeText(encodedData).then(() => {
-			$('.btn_copy_encodeddata').popover('show');
-			window.setTimeout(() => $('.btn_copy_encodeddata').popover('hide'), 5000);
-		});
-	});	
 
 });
 

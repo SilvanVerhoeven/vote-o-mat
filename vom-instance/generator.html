@@ -193,14 +193,13 @@
 
 		<div id="encodeddata">
 			<p class="lead">Geschafft! Also fast.</p>
-			<p>Im untenstehenden Textfeld findest du deine Vote-O-Mat-Instanz-Konfiguration.</p>
-			<p>Dieser Text muss jetzt genau so in die Datei
-				<code>data.json</code> im Verzeichnis
-				<code>config</code> dieser Vote-O-Mat-Instanz kopiert werden. Diese befindet sich standardmäßig im Ordner <code>vom-instance</code>. Falls die Datei nicht existiert, erstelle sie einfach. Achte darauf, dass die Datei im
+			<p>Du kannst nun die Konfigurationsdatei herunterladen.</p>
+			<p>Die Datei muss jetzt als
+				<code>data.json</code> benannt sein und in das Verzeichnis
+				<code>config</code> dieser Vote-O-Mat-Instanz abgelegt. Diese befindet sich standardmäßig im Ordner <code>vom-instance</code>. Falls die Datei schon existiert, ersetze sie einfach. Achte darauf, dass die Datei im
 				UTF-8-Format gespeichert wird!</p>
 			<button type="button" class="btn btn-default btn_generate_prev">Zurück</button>
-			<a tabindex="0" role="button" class="btn btn-success btn_copy_encodeddata" data-toggle="popover" data-content="Konfiguration kopiert! Du kannst sie nun in die Konfigurationsdatei einfügen." data-template='<div class="popover bg-success" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body border-success bg-success text-white"></div></div>'>Konfiguration in Zwischenablage kopieren</a>
-			<textarea class="form-control" rows="20" id="output_encodeddata" style="margin-top: 1em;"></textarea>
+			<a tabindex="0" role="button" class="btn btn-success btn_download_encodeddata" download="data.json">Konfiguration herunterladen</a>
 		</div>
 
 	</div>
