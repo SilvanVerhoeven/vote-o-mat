@@ -85,7 +85,7 @@ So richtest du die Basis des Vote-O-Maten ein:
 
 Wenn du später Änderungen an `config/setup.json` vornehmen musst, öffne einfach wieder `setup.html`. Es lädt alle Daten aus einer bestehenden `config/setup.json`, so dass du nicht bei Null anfangen musst.
 
-**\*Hinweis**: Wenn die `config/setup.json` nicht geladen werden kann, z.B. weil du die Einrichtung vornimmst, bevor die Dateien hochgeladen wurden, wird das Setup-Tool als Notlösung ein Textfeld auf der ersten Seite anbieten. Kopiere hier den Inhalt einer vorhandenen `config/setup.json` manuell hinein, um Änderungen an der bisherigen Datei vorzunehmen.\*
+_**Hinweis**: Wenn die `config/setup.json` nicht geladen werden kann, z.B. weil du die Einrichtung vornimmst, bevor die Dateien hochgeladen wurden, wird das Setup-Tool als Notlösung ein Textfeld auf der ersten Seite anbieten. Kopiere hier den Inhalt einer vorhandenen `config/setup.json` manuell hinein, um Änderungen an der bisherigen Datei vorzunehmen._
 
 ## Instanzen Erstellen
 
