@@ -108,13 +108,13 @@ function readData() {
 }
 
 function generateTheses() {
-	for (key in Object.keys(Singleton.instance.theses)) {
+	for (key in Object.keys(Singleton.instance.theses ?? [])) {
 		generateThesis(Singleton.instance.theses[key].l, Singleton.instance.theses[key].s, Singleton.instance.theses[key].x);
 	}
 }
 
 function generateLists() {
-	for (key in Object.keys(Singleton.instance.lists)) {
+	for (key in Object.keys(Singleton.instance.lists ?? [])) {
 		generateList(Singleton.instance.lists[key].name, Singleton.instance.lists[key].name_x);
 	}
 }
@@ -181,7 +181,7 @@ function generateGroup(index, name) {
 }
 
 function initializeStatisticsInputs () {
-	if (!setup || !setup.statistics || !setup.statistics.groups) return;
+	if (!setup || !setup.statistics || setup.statistics.groups.length == 0) return;
 	const groups = setup.statistics.groups;
 	if (groups.length > 0) {
 		$('#input_group_select').prop('disabled', false);
@@ -291,21 +291,11 @@ $(function () {
 		delete copy.activeThesis;
 		delete copy.activeList;
 		var jsonstring = JSON.stringify(copy, null, '\t');
-		$('#output_encodeddata').val(jsonstring);
+		var blob = new Blob([jsonstring], { type: "application/json" });
+		$('.btn_download_encodeddata').attr("href", URL.createObjectURL(blob));
 		$('#statistics_input').hide(500);
 		$('#encodeddata').show(500);
 	});
-
-	$('.btn_copy_encodeddata').click(function () {
-		var textArea = $('#output_encodeddata');
-		textArea.focus();
-		textArea.select();
-		var encodedData = textArea.val();
-		navigator.clipboard.writeText(encodedData).then(() => {
-			$('.btn_copy_encodeddata').popover('show');
-			window.setTimeout(() => $('.btn_copy_encodeddata').popover('hide'), 5000);
-		});
-	});	
 
 });
 

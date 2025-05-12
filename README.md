@@ -6,12 +6,11 @@ Vote-O-Mat is a more feature-rich implementation of the voting advice applicatio
 
 Vote-O-Mat makes it easier to
 
-- offer *mahlowat* in multiple languages
+- offer _mahlowat_ in multiple languages
 - adjust its appearance to a brand
 - offer anonymous usage statistics ([see privacy-related information](#privacy))
 
 If you do not need any of these features, you are probably better off using [mahlowat](https://github.com/HSZemi/mahlowat). In those cases, the setup of mahlowat is easier.
-
 
 # General Approach
 
@@ -27,7 +26,6 @@ The Vote-O-Mat is consequently advertised.
 
 Enjoy!
 
-
 # <a name="GettingStarted"></a>Getting Started
 
 A Vote-O-Mat is structured into:
@@ -39,7 +37,7 @@ A Vote-O-Mat is structured into:
 In order to get Vote-O-Mat up and running, you have to do three things:
 
 - Upload all files to a web server.
-- Create a general *setup file* which contains settings for branding, information on the available Vote-O-Mat languages and statistics configurations.
+- Create a general _setup file_ which contains settings for branding, information on the available Vote-O-Mat languages and statistics configurations.
 - Create one Vote-O-Mat instance for each language.
 
 For future reference: outline of the Vote-O-Mat's directory (in excerpts):
@@ -66,45 +64,45 @@ Download Vote-O-Mat into a directory of your choice using the green `Code` butto
 
 ## <a name="upload"></a>Upload
 
-Upload the *content of the root directory `vote-o-mat`* (not the folder `vote-o-mat`) to your web server.
+Upload the _content of the root directory `vote-o-mat`_ (not the folder `vote-o-mat`) to your web server.
 
 For this guide, we assume your web server can be accessed at `https://example.com`.
 
- **Notice:** The Vote-O-Mat is usually visible for everyone once you have uploaded the files. If this is no option for you, work through *General Setup* and *Create Instances* first. Notice that this order can lead to a more cumbersome setup process.
+**Notice:** The Vote-O-Mat is usually visible for everyone once you have uploaded the files. If this is no option for you, work through _General Setup_ and _Create Instances_ first. Notice that this order can lead to a more cumbersome setup process.
 
 ## General Setup
 
 Set up the basic Vote-O-Mat:
 
 - Open the setup tool `setup.html` in the root directory.
-    - Do so by opening the URL `https://example.com/setup.html` in your browser (if you have already uploaded the files).
+  - Do so by opening the URL `https://example.com/setup.html` in your browser (if you have already uploaded the files).
 - Walk through the setup process.
-    - During setup, you need to fill in links to the individual Vote-O-Mat instances. If you do not know them yet, leave them blank for now and fill them in after setting everything else up.
-    - You can also enable statistics for your Vote-O-Mat. [Learn more about Statistics](#statistics)
+  - During setup, you need to fill in links to the individual Vote-O-Mat instances. If you do not know them yet, leave them blank for now and fill them in after setting everything else up.
+  - You can also enable statistics for your Vote-O-Mat. [Learn more about Statistics](#statistics)
 - The setup tool generates a cryptic text at the end.
-- Copy this text into `config/setup.json`.
-    - If the file does not exist in the `config` directory, simply create it. Make sure the file is saved as `UTF-8` encoding.
+- Download the configutation file into `config/setup.json`.
+  - Replace any existing `setup.json` in the `config` directory. Make sure the file is saved as `UTF-8` encoding.
 
 If you later need to make changes to `config/setup.json`, just open `setup.html` again. It loads all data from an existing `config/setup.json`, so you do not have to start from scratch.
 
-***Sidenote**: If the `config/setup.json` cannot be loaded, i.e. because you are doing the setup before uploading the files, the setup tool will prompt you a text field on the first page as a workaround. Manually copy the content of an existing `config/setup.json` into this field to make changes to it.*
+**\*Sidenote**: If the `config/setup.json` cannot be loaded, i.e. because you are doing the setup before uploading the files, the setup tool will prompt you a text field on the first page as a workaround. Manually copy the content of an existing `config/setup.json` into this field to make changes to it.\*
 
 ## Create Instances
 
 You need to create one Vote-O-Mat instance for each language. This can be quite lengthy, so you might want to have multiple people, each configuring a different instance.
 
 - In the root directory: create as many Vote-O-Mat instances as you need.
-    - Do so by copying the template directory `vom-instance` (you can also use the template directory itself as an instance).
+  - Do so by copying the template directory `vom-instance` (you can also use the template directory itself as an instance).
 - Repeat the following process for each instance:
-    - Rename the instance's folder (not the root directory) to suit the anticipated language.
-        - Example: rename the folder to `en` if it contains the English Vote-O-Mat instance.
-    - Open the configuration tool `generator.html` (located inside the instance's directory).
-    - Walk through the configuration process.
-        - You need to add all theses, electable groups or candidates, and their answers.
-        - Also set the language of the Vote-O-Mat instance. If you have not uploaded the files before, no language is going to be available. Skip this step for now.
-    - Copy and save the text created by the configuration tool in `config/data.json` (located inside the instance's directory).
-        - Create the file if it does not yet exis. Save it using `UTF-8` encoding. You know the drill.
-    - Set the display language (e.g. button captions). [Learn how to do that](#DisplayLanguage)
+  - Rename the instance's folder (not the root directory) to suit the anticipated language.
+    - Example: rename the folder to `en` if it contains the English Vote-O-Mat instance.
+  - Open the configuration tool `generator.html` (located inside the instance's directory).
+  - Walk through the configuration process.
+    - You need to add all theses, electable groups or candidates, and their answers.
+    - Also set the language of the Vote-O-Mat instance. If you have not uploaded the files before, no language is going to be available. Skip this step for now.
+  - Download and save the file created by the configuration tool in `config/data.json` (located inside the instance's directory).
+    - Replace any existing `data.json`. Make sure it uses `UTF-8` encoding.
+  - Set the display language (e.g. button captions). [Learn how to do that](#DisplayLanguage)
 
 I bet you already guessed it, but for completeness: like the setup tool, the configuration tool also loads existing `config/data.json` files so you can easily make changes to the file. If this is not possible, it again prompts you ... a text field? No, **two** text fields! One for entering `../config/setup.json` (from the `config` in the root directory) and one for the instance's `config/data.json`.
 
@@ -118,7 +116,7 @@ If you have not set the links to the Vote-O-Mat instances, do so now:
 
 - Open `setup.html` in the root directory (via the web browser).
 - Enter the links to the Vote-O-Mat instances.
-    - Supposed you named the instances `de` and `en` when creating them. The links are then `https://example.com/de` and `https://example.com/en`.
+  - Supposed you named the instances `de` and `en` when creating them. The links are then `https://example.com/de` and `https://example.com/en`.
 - Save the setup text again in `config/setup.json` (in the root directory).
 
 If you have not set the Vote-O-Mat instances yet (i.e. because you have not uploaded the files before), do so now:  
@@ -135,7 +133,7 @@ Delete all other files.
 - The folders `config`, `css`, `img`, `js`, and `lang` (and their content)
 - The file `index.html` (in the root directory)
 - The folders of all Vote-O-Mat instances (and their content)
-- *If statistics are enabled:* the folder `vom-statistics` and its content
+- _If statistics are enabled:_ the folder `vom-statistics` and its content
 
 Done!
 
@@ -151,13 +149,13 @@ You can open the statistics dashboard at `https://example.com/vom-statistics`. [
 
 # Calculations
 
-The points for the groups in the results at the end are calculated as follows: 
+The points for the groups in the results at the end are calculated as follows:
 
 - The user's answers are compared to each group's answers.
 - The group gains 2 points for each thesis where their answer matches the user's.
 - A slight deviation (yes/neutral or neutral/no) gains the group still 1 point.
-- If the answers are contrary or 
-group has no position on a thesis, the group gains no point.
+- If the answers are contrary or
+  group has no position on a thesis, the group gains no point.
 - A thesis that the user skipped gains no one any point. The maximum number of points possible decreases.
 - A thesis that the user counts double gets groups twice the points (0/2/4). This increases the maximum number of points possible.
 
@@ -165,9 +163,10 @@ group has no position on a thesis, the group gains no point.
 
 ## <a name="DisplayLanguage"></a>Set Display Language
 
-Vote-O-Mat comes with three languages: German (de\_de, default), English (en\_gb) and French (fr\_fr).
+Vote-O-Mat comes with three languages: German (de_de, default), English (en_gb) and French (fr_fr).
 
 If you want to change the display language of a Vote-O-Mat instance, you have to do a tiny edit in `index.html`. Go to the very bottom, where you will find this section:
+
 ```
 <!-- Select (uncomment) exactly one of the following languages-->
 <script src="../lang/de_de.js"></script>
@@ -188,7 +187,7 @@ Example: If you want to run Vote-O-Mat in French, it should look like this:
 <!-- end languages-->
 ```
 
-You may also want to change some of the text, especially the Q&A part. In order to do that, directly edit the language `*.js` files which you can find in the `../lang` subfolder in the root directory. 
+You may also want to change some of the text, especially the Q&A part. In order to do that, directly edit the language `*.js` files which you can find in the `../lang` subfolder in the root directory.
 
 You can use html tags inside of the strings. Just make sure to not introduce errors in the JavaScript, because that will unfortunately break the whole application. If you are unsure, maybe ask a friend for help.
 
@@ -233,15 +232,15 @@ It is also possible to use the raw data to run more sophisticated analyses. One 
 
 ### <a name="DataCollection"></a>How does the data collection work?
 
-The Vote-O-Mat contains predefined *checkpoints*. These are specific actions within the application. Checkpoints are:
+The Vote-O-Mat contains predefined _checkpoints_. These are specific actions within the application. Checkpoints are:
 
-- *enter*: the intro page of a Vote-O-Mat instance is displayed
-- *start*: the start button on the intro page or the restart button on the result page were clicked, now displaying the first thesis
-- *result* the results are displayed after a (re)start of the Vote-O-Mat instance (going back on the result page to adjust the answers does not count into the statistics)
+- _enter_: the intro page of a Vote-O-Mat instance is displayed
+- _start_: the start button on the intro page or the restart button on the result page were clicked, now displaying the first thesis
+- _result_ the results are displayed after a (re)start of the Vote-O-Mat instance (going back on the result page to adjust the answers does not count into the statistics)
 
 Each checkpoint can be activated separately. Only then it is part of the collected data. By default, all checkpoints are disabled, thus no data is collected, and no statistics are available.
 
-Every time an activated checkpoint is entered, the Vote-O-Mat instance sends the checkpoint ID (*enter*, *start*, or *result*, or a custom name for these) to the statistics module. The ID can be preceeded by a prefix like *de-* which can be set for each Vote-O-Mat instance and makes it possible to differentiate usages between languages.
+Every time an activated checkpoint is entered, the Vote-O-Mat instance sends the checkpoint ID (_enter_, _start_, or _result_, or a custom name for these) to the statistics module. The ID can be preceeded by a prefix like _de-_ which can be set for each Vote-O-Mat instance and makes it possible to differentiate usages between languages.
 
 The statistic module logs every incoming checkpoint ID (and prefix) together with a timestamp in a [CSV](https://en.wikipedia.org/wiki/Comma-separated_values)-file. This looks like follows:
 
@@ -288,19 +287,19 @@ de-start;1625399797504
 de-result;1625399970330
 ```
 
-Each line in this file is called an *entry*. An entry has the following syntax:
+Each line in this file is called an _entry_. An entry has the following syntax:
 
 ```
 {prefix}{checkpoint ID};{timestamp}\n
 ```
 
-- `prefix`: identifier of the Vote-O-Mat instance which sent the entry *(Default: empty string)*
-- `checkpoint ID`: identifier of the checkpoint which was accessed *(Default: 'enter', 'start', or 'result')*
+- `prefix`: identifier of the Vote-O-Mat instance which sent the entry _(Default: empty string)_
+- `checkpoint ID`: identifier of the checkpoint which was accessed _(Default: 'enter', 'start', or 'result')_
 - `timestamp`: UNIX timestamp in milliseconds
 
 ### Custom Checkpoint IDs
 
-By default, the checkpoint IDs are the same as the checkpoints: *enter*, *start*, and *result*. If these IDs do not suit you, you can customize the used ID for each checkpoint.
+By default, the checkpoint IDs are the same as the checkpoints: _enter_, _start_, and _result_. If these IDs do not suit you, you can customize the used ID for each checkpoint.
 
 - Open `setup.html` to customize the checkpoint IDs.
 - Forward to the statistics settings.
@@ -337,7 +336,7 @@ The log file is called `hits.log` and located in the directory of the statistics
 - Uncollapse the panel on advanced settings at the bottom of the page.
 - Enter a path for the log file. The path is relative to the directory of the statistics module, `vom-statistics`.
 
-**Note:** Vote-O-Mat creates the log file if it does not exist. Yet, Vote-O-Mat does not create any folders on the *path to* the log file. Make sure the directory in which to put the log file already exists, otherwise logging will fail.
+**Note:** Vote-O-Mat creates the log file if it does not exist. Yet, Vote-O-Mat does not create any folders on the _path to_ the log file. Make sure the directory in which to put the log file already exists, otherwise logging will fail.
 
 **Example A:** The log file path `../statistics.csv` will create a log file named `statistics.csv` in the root directory (supposed `vom-statistics` is located in the root directory).
 
@@ -357,7 +356,7 @@ Here is how you can change that URL:
 - Advance to the statistics settings.
 - Uncollapse the panel on advanced settings at the bottom of the page.
 - Enter `stats`, the new name of the folder (former `vom-statistics`).
-    - *For techies:* you can enter any path relative to the root directory or a complete URL.
+  - _For techies:_ you can enter any path relative to the root directory or a complete URL.
 
 **Attention (for techies):** This feature enables you to move the complete statistics module to another location, like another server. For whatever reason you possibly would want to that: notice, that the module expects the `setup.json` to be located at `../config/setup.json`, relative to the statistics module's directory.
 
@@ -365,7 +364,7 @@ Here is how you can change that URL:
 
 ### My changes in `setup.json` and `data.json` do not seem to have an effect.
 
-Are you saving the text generated by the setup/configuration tool in the files? Are you editing the correct file? Is the file at the correct location? Have you uploaded the updated file to the web server?
+Are you saving the file generated by the setup/configuration tool? Are you naming the file correctly? Is the file at the correct location? Have you uploaded the updated file to the web server?
 
 If yes, it might be a cache issue. Access the file in question via browser (at `https://example.com/config/setup.json` or `https://example.com/example-instance/config/data.json`). Press `Ctrl+F5` to fully reload the file. Go back to your Vote-O-Mat (instance), reload and check whether this worked.
 
@@ -396,6 +395,7 @@ Did you open the `index.html` file directly in your web browser? That unfortunat
 If you did in fact access it from a web server, do as the error message says: Does the file exist? Can you access it with your web browser directly or do you get an error message? And lastly, does it not contain syntax errors?
 
 # Weal and Woe
+
 ### I have issues setting up Vote-O-Mat
 
 A pity! Check out [Troubleshooting](#troubleshooting). If this does not work, ask a friend. If this person also cannot help, [open an issue](https://github.com/SilvanVerhoeven/vote-o-mat/issues) (and hope it gets noticed).

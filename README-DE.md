@@ -6,7 +6,7 @@ Vote-O-Mat ist eine funktionsreichere Version des Wahlpositionsvergleichswerkzeu
 
 Vote-O-Mat macht es einfacher
 
-- *mahlowat* in mehreren Sprachen anzubieten
+- _mahlowat_ in mehreren Sprachen anzubieten
 - das Aussehen an eine Marke ("Branding") anzupassen
 - anonyme Nutzungsstatistiken anzubieten ([siehe Infos zum Datenschutz](#privacy))
 
@@ -37,7 +37,7 @@ Daraus besteht ein Vote-O-Mat:
 Um den Vote-O-Mat zum Laufen zu bringen, sind diese drei Schritte notwendig:
 
 - Alle Dateien auf einen Webserver hochladen.
-- Eine allgemeine *Setup-Datei* erstellen, die Einstellungen für das Branding, Informationen über die verfügbaren Vote-O-Mat-Sprachen und Statistik-Konfigurationen enthält.
+- Eine allgemeine _Setup-Datei_ erstellen, die Einstellungen für das Branding, Informationen über die verfügbaren Vote-O-Mat-Sprachen und Statistik-Konfigurationen enthält.
 - Eine Vote-O-Mat-Instanz für jede Sprache erstellen.
 
 Für späteren Durchblick: Übersicht über das Verzeichnis des Vote-O-Maten (in Auszügen):
@@ -64,45 +64,45 @@ Laden Sie den Vote-O-Maten in ein Verzeichnis Ihrer Wahl herunter, indem Sie den
 
 ## <a name="upload"></a>Upload
 
-Laden Sie den *Inhalt des Wurzelverzeichnisses `vote-o-mat`* (nicht den Ordner `vote-o-mat` selbst) auf einen Webserver hoch.
+Laden Sie den _Inhalt des Wurzelverzeichnisses `vote-o-mat`_ (nicht den Ordner `vote-o-mat` selbst) auf einen Webserver hoch.
 
 Für diese Anleitung gehen wir davon aus, dass der Webserver unter `https://example.com` erreichbar ist.
 
- **Hinweis:** Der Vote-O-Mat ist normalerweise für alle sichtbar, sobald die Dateien hochgeladen sind. Wenn das keine Option ist, arbeite zuerst *Grundlegende Einrichtung* und *Instanzen Erstellen* durch. Diese Reihenfolge kann allerdings den Einrichtungsprozess verkomplizieren.
+**Hinweis:** Der Vote-O-Mat ist normalerweise für alle sichtbar, sobald die Dateien hochgeladen sind. Wenn das keine Option ist, arbeite zuerst _Grundlegende Einrichtung_ und _Instanzen Erstellen_ durch. Diese Reihenfolge kann allerdings den Einrichtungsprozess verkomplizieren.
 
 ## Allgemeine Einrichtung
 
 So richtest du die Basis des Vote-O-Maten ein:
 
 - Öffne das Setup-Tool `setup.html` im Wurzelverzeichnis.
-    - Öffne dazu die URL `https://example.com/setup.html` im Browser (solltest du die Dateien bereits hochgeladen haben).
+  - Öffne dazu die URL `https://example.com/setup.html` im Browser (solltest du die Dateien bereits hochgeladen haben).
 - Gehe durch den Einrichtungsprozess.
-    - Während der Einrichtung must du die Links zu den einzelnen Vote-O-Mat-Instanzen eingeben. Wenn du diese noch nicht kennst, lass die Felder vorerst leer. Nachdem alles andere eingerichtet wurde kannst du sie immer noch nachtragen.
-    - Du kannst hier auch die Statistiken für den Vote-O-Maten aktivieren. [Erfahre mehr über Statistiken](#statistics)
+  - Während der Einrichtung must du die Links zu den einzelnen Vote-O-Mat-Instanzen eingeben. Wenn du diese noch nicht kennst, lass die Felder vorerst leer. Nachdem alles andere eingerichtet wurde kannst du sie immer noch nachtragen.
+  - Du kannst hier auch die Statistiken für den Vote-O-Maten aktivieren. [Erfahre mehr über Statistiken](#statistics)
 - Das Setup-Tool erzeugt am Ende einen kryptischen Text.
-- Kopiere diesen Text in die Datei `config/setup.json`.
-    - Wenn die Datei nicht im Verzeichnis `config` existiert, erstelle sie einfach. Stelle sicher, dass die Datei in `UTF-8`-Kodierung gespeichert wird.
+- Lade die erzeugte Konfigurationsdatei herunter und speichere sie unter `config/setup.json`.
+  - Überschreibe eine existierende `setup.json` im `config`-Verzeichnis. Stelle sicher, dass die Datei in `UTF-8`-Kodierung gespeichert wird.
 
 Wenn du später Änderungen an `config/setup.json` vornehmen musst, öffne einfach wieder `setup.html`. Es lädt alle Daten aus einer bestehenden `config/setup.json`, so dass du nicht bei Null anfangen musst.
 
-***Hinweis**: Wenn die `config/setup.json` nicht geladen werden kann, z.B. weil du die Einrichtung vornimmst, bevor die Dateien hochgeladen wurden, wird das Setup-Tool als Notlösung ein Textfeld auf der ersten Seite anbieten. Kopiere hier den Inhalt einer vorhandenen `config/setup.json` manuell hinein, um Änderungen an der bisherigen Datei vorzunehmen.*
+_**Hinweis**: Wenn die `config/setup.json` nicht geladen werden kann, z.B. weil du die Einrichtung vornimmst, bevor die Dateien hochgeladen wurden, wird das Setup-Tool als Notlösung ein Textfeld auf der ersten Seite anbieten. Kopiere hier den Inhalt einer vorhandenen `config/setup.json` manuell hinein, um Änderungen an der bisherigen Datei vorzunehmen._
 
 ## Instanzen Erstellen
 
 Du musst für jede Sprache eine eigene Vote-O-Mat-Instanz erstellen. Das kann recht langwierig sein. Vielleicht willst du das gemeinsam mit anderen Leuten machen. Jede Person konfiguriert dann eine andere Instanz.
 
 - Im Wurzelverzeichnis: Erstelle so viele Vote-O-Mat-Instanzen, wie du benötigst.
-    - Kopiere dazu die Vorlage `vom-instance` (du kannst auch die Vorlage selbst als Instanz verwenden).
+  - Kopiere dazu die Vorlage `vom-instance` (du kannst auch die Vorlage selbst als Instanz verwenden).
 - Wiederhole folgende Schritte für jede Instanz:
-    - Benenne den Ordner der Instanz (nicht das Wurzelverzeichnis) entsprechend der angedachten Sprache um.
-        - Beispiel: Benenne den Ordner in `de` um, wenn er die deutsche Vote-O-Mat-Instanz enthält.
-    - Öffne das Konfigurations-Tool `generator.html` (das sich im Verzeichnis der Instanz befindet).
-    - Gehe durch den Konfigurationsprozess.
-        - Du musst alle Thesen, wählbaren Gruppen oder Kandidaten und ihre Antworten hinzufügen.
-        - Lege auch die Sprache der Vote-O-Mat-Instanz fest. Wenn die Dateien bisher nicht hochgeladen wurden, ist keine Sprache verfügbar. Überspringe diesen Schritt vorerst.
-    - Kopiere und speichere den vom Konfigurationstool erstellten Text in die Datei `config/data.json` (die sich im Verzeichnis der Instanz befindet).
-        - Erstellen Sie die Datei, falls sie noch nicht existiert. Speichern Sie sie mit der Kodierung `UTF-8`. Sie wissen, wie es geht.
-    - Lege die Anzeigesprache fest (z.B. für die Beschriftung der Buttons). [Erfahre, wie das geht](#DisplayLanguage)
+  - Benenne den Ordner der Instanz (nicht das Wurzelverzeichnis) entsprechend der angedachten Sprache um.
+    - Beispiel: Benenne den Ordner in `de` um, wenn er die deutsche Vote-O-Mat-Instanz enthält.
+  - Öffne das Konfigurations-Tool `generator.html` (das sich im Verzeichnis der Instanz befindet).
+  - Gehe durch den Konfigurationsprozess.
+    - Du musst alle Thesen, wählbaren Gruppen oder Kandidaten und ihre Antworten hinzufügen.
+    - Lege auch die Sprache der Vote-O-Mat-Instanz fest. Wenn die Dateien bisher nicht hochgeladen wurden, ist keine Sprache verfügbar. Überspringe diesen Schritt vorerst.
+  - Lade die vom Konfigurationstool erstellte Datei herunter und speichere sie in `config/data.json` (im Verzeichnis der Instanz).
+    - Überschreibe existierende `data.json`. Stelle sicher, dass die Datei `UTF-8` kodiert ist.
+  - Lege die Anzeigesprache fest (z.B. für die Beschriftung der Buttons). [Erfahre, wie das geht](#DisplayLanguage)
 
 Es ist sicher schon klar, aber der Vollständigkeit halber: Wie das Setup-Tool lädt auch das Konfigurations-Tool bestehende `config/data.json`-Dateien, sodass du einfach Änderungen an der Datei vornehmen kannst. Wenn das Laden nicht möglich ist, zeigt das Tool wieder ... ein Textfeld? Nein, **zwei** Textfelder! Eines für die Eingabe von `../config/setup.json` (aus der `config` im Wurzelverzeichnis) und eines für die `config/data.json` der Instanz.
 
@@ -116,10 +116,10 @@ Solltest du noch nicht die Links zu den Vote-O-Mat-Instanzen gesetzt haben, ist 
 
 - Öffne die Datei `setup.html` im Wurzelverzeichnis (über den Browser).
 - Gebe die Links zu den Vote-O-Mat-Instanzen ein.
-    - Angenommen, die Instanzen wurden beim Erstellen `de` und `en` genannt. Die Links sind dann `https://example.com/de` und `https://example.com/en`.
+  - Angenommen, die Instanzen wurden beim Erstellen `de` und `en` genannt. Die Links sind dann `https://example.com/de` und `https://example.com/en`.
 - Speicher den Setup-Text erneut in `config/setup.json` (im Wurzelverzeichnis).
 
-Wenn du die Vote-O-Mat-Instanzen noch nicht eingestellt haben solltest (z.B. weil Sie die Dateien noch nicht hochgeladen haben), wäre das jetzt *die* Gelegenheit:  
+Wenn du die Vote-O-Mat-Instanzen noch nicht eingestellt haben solltest (z.B. weil Sie die Dateien noch nicht hochgeladen haben), wäre das jetzt _die_ Gelegenheit:  
 Wiederhole für jede Instanz:
 
 - Öffne `generator.html` (im Verzeichnis der Instanz).
@@ -133,7 +133,7 @@ Löschen alle anderen Dateien.
 - Die Ordner `config`, `css`, `img`, `js`, und `lang` (und deren Inhalt)
 - Die Datei `index.html` (im Wurzelverzeichnis)
 - Die Ordner aller Vote-O-Mat-Instanzen (und deren Inhalt)
-- *Wenn Statistiken aktiviert sind:* der Ordner `vom-statistics` und seinen Inhalt
+- _Wenn Statistiken aktiviert sind:_ der Ordner `vom-statistics` und seinen Inhalt
 
 Fertig!
 
@@ -162,7 +162,7 @@ Die Punkte für die Gruppen im Endresultat werden wie folgt berechnet:
 
 ## <a name="DisplayLanguage"></a>Anzeigesprache einstellen
 
-Der Vote-O-Mat kommt in drei Sprachen: deutsch (de\_de, Standard), Englisch (en\_gb) und Französisch (fr\_fr).
+Der Vote-O-Mat kommt in drei Sprachen: deutsch (de_de, Standard), Englisch (en_gb) und Französisch (fr_fr).
 
 Wenn du die Anzeigesprache eienr Vote-O-Mat-Instanz anpassen willst, musst du lediglich eine winzige Änderung am der `index.html` vornehmen. Gehe in dieser Datei ganz ans Ende. Dort findest du folgende Abschnitt vor:
 
@@ -233,17 +233,17 @@ Es ist auch möglich, die Rohdaten zu verwenden, um anspruchsvollere Analysen du
 
 ### <a name="DataCollection"></a>Wie funktioniert die Datenerfassung?
 
-Der Vote-O-Mat enthält vordefinierte *Checkpoints*. Das sind bestimmte Aktionen innerhalb der Anwendung. Checkpoints sind:
+Der Vote-O-Mat enthält vordefinierte _Checkpoints_. Das sind bestimmte Aktionen innerhalb der Anwendung. Checkpoints sind:
 
-- *enter*: die Startseite einer Vote-O-Mat-Instanz wird angezeigt
-- *start*: der Start-Knopf auf der Startseite oder der Neustart-Knopf auf der Ergebnisseite wurde angeklickt, sodass die erste These angezeigt wird
-- *result* die Ergebnisse werden nach einem (Neu-)Start der Vote-O-Mat-Instanz angezeigt (ein Zurückgehen auf die Ergebnisseite zum Anpassen der Antworten geht nicht in die Statistik ein)
+- _enter_: die Startseite einer Vote-O-Mat-Instanz wird angezeigt
+- _start_: der Start-Knopf auf der Startseite oder der Neustart-Knopf auf der Ergebnisseite wurde angeklickt, sodass die erste These angezeigt wird
+- _result_ die Ergebnisse werden nach einem (Neu-)Start der Vote-O-Mat-Instanz angezeigt (ein Zurückgehen auf die Ergebnisseite zum Anpassen der Antworten geht nicht in die Statistik ein)
 
 Jeder Checkpoint kann separat aktiviert werden. Erst dann ist er Teil der gesammelten Daten. Standardmäßig sind alle Checkpoints deaktiviert, so dass keine Daten gesammelt werden und keine Statistiken verfügbar sind.
 
-Jedes Mal, wenn ein aktivierter Checkpoint eingegeben wird, sendet die Vote-O-Mat-Instanz die Checkpoint-ID (*enter*, *start* oder *result*, oder eine jeweils benutzerdefinierte ID) an das Statistikmodul. Der ID kann ein Präfix wie *de-* vorangestellt werden, das für jede Vote-O-Mat-Instanz festgelegt werden kann und es ermöglicht, die Nutzung in verschiedenen Sprachen zu unterscheiden.
+Jedes Mal, wenn ein aktivierter Checkpoint eingegeben wird, sendet die Vote-O-Mat-Instanz die Checkpoint-ID (_enter_, _start_ oder _result_, oder eine jeweils benutzerdefinierte ID) an das Statistikmodul. Der ID kann ein Präfix wie _de-_ vorangestellt werden, das für jede Vote-O-Mat-Instanz festgelegt werden kann und es ermöglicht, die Nutzung in verschiedenen Sprachen zu unterscheiden.
 
-Das Statistikmodul speichert jede eingehende Checkpoint-ID (und Präfix) zusammen mit einem Zeitstempel in einer [CSV](https://de.wikipedia.org/wiki/CSV_(Dateiformat))-Datei. Diese sieht wie folgt aus:
+Das Statistikmodul speichert jede eingehende Checkpoint-ID (und Präfix) zusammen mit einem Zeitstempel in einer [CSV](<https://de.wikipedia.org/wiki/CSV_(Dateiformat)>)-Datei. Diese sieht wie folgt aus:
 
 ```
 de-enter;1625303227182
@@ -288,19 +288,19 @@ de-start;1625399797504
 de-result;1625399970330
 ```
 
-Jede Zeile in dieser Datei wird als *Eintrag* bezeichnet. Ein Eintrag hat die folgende Syntax:
+Jede Zeile in dieser Datei wird als _Eintrag_ bezeichnet. Ein Eintrag hat die folgende Syntax:
 
 ```
 {Präfix}{Checkpoint-ID};{Zeitstempel}\n
 ```
 
-- `Präfix`: Kennung der Vote-O-Mat-Instanz, die den Eintrag gesendet hat *(Standard: leere Zeichenkette)*
-- `Checkpoint-ID`: Bezeichner des Checkpoints, der erreicht wurde *(Standard: 'enter', 'start' oder 'result')*
+- `Präfix`: Kennung der Vote-O-Mat-Instanz, die den Eintrag gesendet hat _(Standard: leere Zeichenkette)_
+- `Checkpoint-ID`: Bezeichner des Checkpoints, der erreicht wurde _(Standard: 'enter', 'start' oder 'result')_
 - `Zeitstempel`: UNIX-Zeitstempel in Millisekunden
 
 ### Benutzerdefinierte Checkpoint-IDs
 
-Standardmäßig lauten die Checkpoint-IDs so wie die Checkpoints: *enter*, *start* und *result*. Wenn diese IDs für deine Anwendung nicht passen, kann die ID für jeden Prüfpunkt angepasst werden.
+Standardmäßig lauten die Checkpoint-IDs so wie die Checkpoints: _enter_, _start_ und _result_. Wenn diese IDs für deine Anwendung nicht passen, kann die ID für jeden Prüfpunkt angepasst werden.
 
 - Öffne `setup.html`, um die Checkpoint-IDs anzupassen.
 - Gehe weiter zu den Statistikeinstellungen.
@@ -337,7 +337,7 @@ Die Log-Datei heißt `hits.log` und befindet sich im Verzeichnis des Statistikmo
 - Klappe das Feld für die erweiterten Einstellungen unten auf der Seite aus.
 - Gebe einen Pfad für die Log-Datei ein. Der Pfad ist relativ zum Verzeichnis des Statistikmoduls, `vom-statistics`.
 
-**Hinweis:** Vote-O-Mat erstellt die Log-Datei, wenn sie nicht vorhanden ist. Vote-O-Mat erstellt jedoch keine Ordner auf dem *Pfad zu* der Log-Datei. Vergewissere dich, dass das Verzeichnis, in dem die Log-Datei abgelegt werden soll, bereits existiert, sonst schlägt die Speicherung fehl.
+**Hinweis:** Vote-O-Mat erstellt die Log-Datei, wenn sie nicht vorhanden ist. Vote-O-Mat erstellt jedoch keine Ordner auf dem _Pfad zu_ der Log-Datei. Vergewissere dich, dass das Verzeichnis, in dem die Log-Datei abgelegt werden soll, bereits existiert, sonst schlägt die Speicherung fehl.
 
 **Beispiel A:** Der Log-Datei-Pfad `../statistics.csv` erzeugt eine Log-Datei mit dem Namen `statistics.csv` im Wurzelverzeichnis (vorausgesetzt `vom-statistics` befindet sich im Wurzelverzeichnis).
 
@@ -357,7 +357,7 @@ Hier siehst du, wie du diese URL ändern kannst:
 - Gehe zu den Statistikeinstellungen.
 - Klappe das Panel für erweiterte Einstellungen am unteren Ende der Seite aus.
 - Gib `stats` in das entsprechende Textfeld ein, den neuen Namen des Ordners (früher `vom-statistics`).
-    - *Für Nerds:* Du kannst einen beliebigen Pfad relativ zum Wurzelverzeichnis oder eine komplette URL eingeben.
+  - _Für Nerds:_ Du kannst einen beliebigen Pfad relativ zum Wurzelverzeichnis oder eine komplette URL eingeben.
 
 **Achtung (für Nerds):** Diese Funktion ermöglicht es dir, das komplette Statistikmodul an einen anderen Ort zu verschieben, z.B. auf einen anderen Server. Aus welchem Grund auch immer man das machen wollen würde: Beachte, dass das Modul erwartet, dass sich die `setup.json` unter `../config/setup.json` befindet, relativ zum Verzeichnis des Statistikmoduls.
 
@@ -365,7 +365,7 @@ Hier siehst du, wie du diese URL ändern kannst:
 
 ### Meine Änderungen in `setup.json` und `data.json` scheinen keine Auswirkungen zu haben.
 
-Speicherst du den vom Setup-/Konfigurations-Tool erzeugten Text in den Dateien? Bearbeitest du die richtige Datei? Befindet sich die Datei am richtigen Ort? Hast du die angepasste Datei auf den Webserver hochgeladen?
+Speicherst du die vom Setup-/Konfigurations-Tool erzeugte Datei? Ist die Datei richtig benannt? Befindet sich die Datei am richtigen Ort? Hast du die angepasste Datei auf den Webserver hochgeladen?
 
 Wenn ja, könnte es sich um ein Cache-Problem handeln. Rufe die betreffende Datei im Browser auf (unter `https://example.com/config/setup.json` oder `https://example.com/example-instance/config/data.json`). Drücke `Strg+F5`, um die Datei vollständig neu zu laden. Gehe dann zurück zum Vote-O-Maten (bzw. der Vote-O-Mat-Instanz), lade die Seite neu und überprüfe, ob das funktioniert hat.
 
@@ -397,6 +397,7 @@ Wenn die Dateien hingegen bereits auf einem Webserver liegen und dennoch die Feh
 Lässt sich sich mit dem Webbrowser direkt aufrufen oder kommt eine Fehlermeldung? Und nicht zuletzt, enthält sie keine Syntaxfehler?
 
 # Freud und Leid
+
 ### Ich habe Probleme beim Einrichten des Vote-O-Maten
 
 Schade! Schau mal [hier](#troubleshooting), hier gibt's günstig Lösungsvorschläge. Wenn da nichts dabei ist, frag mal Freunde. Wenn auch die nicht helfen können, [erstelle ein Issue](https://github.com/SilvanVerhoeven/vote-o-mat/issues) (und hoffe, dass es bemerkt wird).
